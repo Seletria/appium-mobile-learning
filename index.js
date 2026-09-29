@@ -1,17 +1,12 @@
 const { remote } = require('webdriverio');
 const assert = require('assert');
+const capabilities = require('./config/capabilities');
 
 async function main() {
   const client = await remote({
     hostname: 'localhost',
     port: 4723,
-    capabilities: {
-      platformName: 'Android',
-      'appium:automationName': 'UiAutomator2',
-      'appium:deviceName': 'emulator-5554',
-      'appium:appPackage': 'com.saucelabs.mydemoapp.android',
-      'appium:appActivity': '.view.activities.SplashActivity',
-    }
+    capabilities
   });
 
   try {

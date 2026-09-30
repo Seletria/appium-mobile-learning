@@ -2,10 +2,12 @@ const { remote } = require('webdriverio');
 const assert = require('assert');
 const capabilities = require('../config/capabilities');
 const LoginScreen = require('../pages/LoginScreen');
+const MenuScreen = require('../pages/MenuScreen');
 
 describe('Keyboard Management', () => {
   let client;
   let loginScreen;
+  let menuScreen;
 
   beforeEach(async () => {
     client = await remote({
@@ -14,17 +16,9 @@ describe('Keyboard Management', () => {
       capabilities,
     });
 
-    const menuIcon = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/menuIV")'
-    );
-    await menuIcon.waitForDisplayed({ timeout: 5000 });
-    await menuIcon.click();
-
-    const loginItem = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/itemTV").text("Log In")'
-    );
-    await loginItem.waitForDisplayed({ timeout: 5000 });
-    await loginItem.click();
+    menuScreen = new MenuScreen(client);
+    await menuScreen.openMenu();
+    await menuScreen.tapLogIn();
 
     loginScreen = new LoginScreen(client);
     await loginScreen.waitForScreen();

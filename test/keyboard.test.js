@@ -1,10 +1,11 @@
 const { remote } = require('webdriverio');
 const assert = require('assert');
 const capabilities = require('../config/capabilities');
+const LoginScreen = require('../pages/LoginScreen');
 
 describe('Keyboard Management', () => {
   let client;
-  let usernameInput;
+  let loginScreen;
 
   beforeEach(async () => {
     client = await remote({
@@ -25,10 +26,8 @@ describe('Keyboard Management', () => {
     await loginItem.waitForDisplayed({ timeout: 5000 });
     await loginItem.click();
 
-    usernameInput = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/nameET")'
-    );
-    await usernameInput.waitForDisplayed({ timeout: 5000 });
+    loginScreen = new LoginScreen(client);
+    await loginScreen.waitForScreen();
   });
 
   afterEach(async () => {
@@ -41,7 +40,7 @@ describe('Keyboard Management', () => {
   });
 
   it('should show keyboard after tapping username field', async () => {
-    await usernameInput.click();
+    await loginScreen.tapUsernameInput();
 
     await client.waitUntil(
       async () => await client.isKeyboardShown(),

@@ -1,9 +1,11 @@
 const { remote } = require('webdriverio');
 const assert = require('assert');
 const capabilities = require('../config/capabilities');
+const MenuScreen = require('../pages/MenuScreen');
 
 describe('Login Flow', () => {
   let client;
+  let menuScreen;
 
   beforeEach(async () => {
     client = await remote({
@@ -11,6 +13,7 @@ describe('Login Flow', () => {
       port: 4723,
       capabilities,
     });
+    menuScreen = new MenuScreen(client);
   });
 
   afterEach(async () => {
@@ -37,16 +40,9 @@ describe('Login Flow', () => {
     const isDisplayed = await addToCartButton.isDisplayed();
     assert.strictEqual(isDisplayed, true);
 
-    const menuIcon = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/menuIV")'
-    );
-    await menuIcon.click();
+    await menuScreen.openMenu();
 
-    const loginItem = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/itemTV").text("Log In")'
-    );
-    await loginItem.waitForDisplayed({ timeout: 5000 });
-    await loginItem.click();
+    await menuScreen.tapLogIn();
 
     const loginTitle = await client.$(
       'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/loginTV").text("Login")'
@@ -79,10 +75,6 @@ describe('Login Flow', () => {
     );
     await menuIconAfterLogin.click();
 
-    const logoutItem = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/itemTV").text("Log Out")'
-    );
-    await logoutItem.waitForDisplayed({ timeout: 5000 });
-    assert.strictEqual(await logoutItem.isDisplayed(), true);
+    assert.strictEqual(await menuScreen.isLogOutDisplayed(), true);
   });
 });

@@ -2,10 +2,12 @@ const { remote } = require('webdriverio');
 const assert = require('assert');
 const capabilities = require('../config/capabilities');
 const MenuScreen = require('../pages/MenuScreen');
+const LoginScreen = require('../pages/LoginScreen');
 
 describe('Login Flow', () => {
   let client;
   let menuScreen;
+  let loginScreen;
 
   beforeEach(async () => {
     client = await remote({
@@ -14,6 +16,7 @@ describe('Login Flow', () => {
       capabilities,
     });
     menuScreen = new MenuScreen(client);
+    loginScreen = new LoginScreen(client);
   });
 
   afterEach(async () => {
@@ -50,20 +53,7 @@ describe('Login Flow', () => {
     const loginText = await loginTitle.getText();
     assert.strictEqual(loginText, 'Login');
 
-    const usernameInput = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/nameET")'
-    );
-    await usernameInput.setValue('bod@example.com');
-
-    const passwordInput = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/passwordET")'
-    );
-    await passwordInput.setValue('10203040');
-
-    const loginButton = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/loginBtn")'
-    );
-    await loginButton.click();
+    await loginScreen.login('bod@example.com', '10203040');
 
     const catalogAfterLogin = await client.$(
       'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/titleTV").text("Sauce Labs Backpack")'

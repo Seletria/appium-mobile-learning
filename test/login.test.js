@@ -47,11 +47,7 @@ describe('Login Flow', () => {
 
     await menuScreen.tapLogIn();
 
-    const loginTitle = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/loginTV").text("Login")'
-    );
-    const loginText = await loginTitle.getText();
-    assert.strictEqual(loginText, 'Login');
+    await loginScreen.waitForScreen();
 
     await loginScreen.login('bod@example.com', '10203040');
 

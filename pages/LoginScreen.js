@@ -22,6 +22,12 @@ class LoginScreen {
     );
   }
 
+  get loginTitle() {
+    return this.client.$(
+      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/loginTV").text("Login")'
+    );
+  }
+
   async login(username, password) {
     const usernameInput = await this.usernameInput;
     await usernameInput.waitForDisplayed({ timeout: 5000 });
@@ -37,8 +43,8 @@ class LoginScreen {
   }
 
   async waitForScreen() {
-    const usernameInput = await this.usernameInput;
-    await usernameInput.waitForDisplayed({ timeout: 5000 });
+    const title = await this.loginTitle;
+    await title.waitForDisplayed({ timeout: 5000 });
   }
 
   async tapUsernameInput() {

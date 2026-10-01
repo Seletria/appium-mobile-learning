@@ -59,10 +59,7 @@ describe('Login Flow', () => {
 
     await catalogScreen.waitForScreen();
 
-    const menuIconAfterLogin = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/menuIV")'
-    );
-    await menuIconAfterLogin.click();
+    await menuScreen.openMenu();
 
     assert.strictEqual(await menuScreen.isLogOutDisplayed(), true);
   });

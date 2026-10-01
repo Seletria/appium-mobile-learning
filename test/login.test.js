@@ -3,11 +3,13 @@ const assert = require('assert');
 const capabilities = require('../config/capabilities');
 const MenuScreen = require('../pages/MenuScreen');
 const LoginScreen = require('../pages/LoginScreen');
+const CatalogScreen = require('../pages/CatalogScreen');
 
 describe('Login Flow', () => {
   let client;
   let menuScreen;
   let loginScreen;
+  let catalogScreen;
 
   beforeEach(async () => {
     client = await remote({
@@ -17,6 +19,7 @@ describe('Login Flow', () => {
     });
     menuScreen = new MenuScreen(client);
     loginScreen = new LoginScreen(client);
+    catalogScreen = new CatalogScreen(client);
   });
 
   afterEach(async () => {
@@ -24,6 +27,9 @@ describe('Login Flow', () => {
   });
 
   it('should complete the full journey: view product, log in, and verify logout option is available', async () => {
+
+    await catalogScreen.waitForScreen();
+
     const blackBackpackTitle = await client.$(
       'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/titleTV").text("Sauce Labs Backpack")'
     );
@@ -51,10 +57,7 @@ describe('Login Flow', () => {
 
     await loginScreen.login('bod@example.com', '10203040');
 
-    const catalogAfterLogin = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/titleTV").text("Sauce Labs Backpack")'
-    );
-    await catalogAfterLogin.waitForDisplayed({ timeout: 5000 });
+    await catalogScreen.waitForScreen();
 
     const menuIconAfterLogin = await client.$(
       'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/menuIV")'

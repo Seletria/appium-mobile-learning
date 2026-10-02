@@ -10,12 +10,6 @@ class MenuScreen {
     );
   }
 
-  get loginItem() {
-    return this.client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/itemTV").text("Log In")'
-    );
-  }
-
   async openMenu() {
     const menuIcon = await this.menuIcon;
     await menuIcon.waitForDisplayed({ timeout: 5000 });

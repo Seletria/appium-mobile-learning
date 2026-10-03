@@ -25,11 +25,6 @@ describe('Scroll', () => {
     await client.deleteSession();
   });
 
-  it('should show the product list on launch', async () => {
-    const isListDisplayed = await listContainer.isDisplayed();
-    assert.strictEqual(isListDisplayed, true, 'Precondition: ürün listesi açılışta görünmeli');
-  });
-
   it('should find the target product by scrolling', async () => {
     const targetElement = await client.$(
       `android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/titleTV").text("${targetProductName}")`

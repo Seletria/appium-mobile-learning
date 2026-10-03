@@ -1,12 +1,14 @@
 const { remote } = require('webdriverio');
 const assert = require('assert');
 const capabilities = require('../config/capabilities');
+const CatalogScreen = require('../pages/CatalogScreen');
 
 describe('Scroll', () => {
   const targetProductName = 'Sauce Labs Bolt T-Shirt';
   const maxAttempts = 10;
   let client;
   let listContainer;
+  let catalogScreen;
 
   beforeEach(async () => {
     client = await remote({
@@ -15,10 +17,12 @@ describe('Scroll', () => {
       capabilities,
     });
 
-    listContainer = await client.$(
-      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/productRV")'
-    );
+    catalogScreen = new CatalogScreen(client);
+    await catalogScreen.waitForScreen();
+
+    listContainer = await catalogScreen.listContainer;
     await listContainer.waitForDisplayed({ timeout: 5000 });
+
   });
 
   afterEach(async () => {

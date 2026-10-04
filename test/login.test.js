@@ -49,8 +49,6 @@ describe('Login Flow', () => {
 
   it('should show an error when trying to log in without a username', async () => {
     await catalogScreen.waitForScreen();
-    await catalogScreen.tapProductByName('Sauce Labs Backpack');
-    await productDetailScreen.waitForScreen();
 
     await menuScreen.openMenu();
     await menuScreen.tapLogIn();

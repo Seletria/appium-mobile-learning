@@ -32,23 +32,32 @@ describe('Login Flow', () => {
   it('should complete the full journey: view product, log in, and verify logout option is available', async () => {
 
     await catalogScreen.waitForScreen();
-
     await catalogScreen.tapProductByName('Sauce Labs Backpack');
-
     await productDetailScreen.waitForScreen();
 
     await menuScreen.openMenu();
-
     await menuScreen.tapLogIn();
 
     await loginScreen.waitForScreen();
-
     await loginScreen.login('bod@example.com', '10203040');
 
     await catalogScreen.waitForScreen();
-
     await menuScreen.openMenu();
 
     assert.strictEqual(await menuScreen.isLogOutDisplayed(), true);
   });
+
+  it('should show an error when trying to log in without a username', async () => {
+    await catalogScreen.waitForScreen();
+    await catalogScreen.tapProductByName('Sauce Labs Backpack');
+    await productDetailScreen.waitForScreen();
+
+    await menuScreen.openMenu();
+    await menuScreen.tapLogIn();
+
+    await loginScreen.waitForScreen();
+    await loginScreen.login('', '10203040');
+    await loginScreen.usernameError.waitForDisplayed();
+  });
+
 });

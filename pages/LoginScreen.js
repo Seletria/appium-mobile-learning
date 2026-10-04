@@ -28,6 +28,12 @@ class LoginScreen {
     );
   }
 
+  get usernameError() {
+    return this.client.$(
+      'android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/nameErrorTV").text("Username is required")'
+    );
+  }
+
   async login(username, password) {
     const usernameInput = await this.usernameInput;
     await usernameInput.waitForDisplayed({ timeout: 5000 });

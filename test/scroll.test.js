@@ -22,7 +22,6 @@ describe('Scroll', () => {
 
     listContainer = await catalogScreen.listContainer;
     await listContainer.waitForDisplayed({ timeout: 5000 });
-
   });
 
   afterEach(async () => {
@@ -30,39 +29,7 @@ describe('Scroll', () => {
   });
 
   it('should find the target product by scrolling', async () => {
-    const targetElement = await client.$(
-      `android=new UiSelector().resourceId("com.saucelabs.mydemoapp.android:id/titleTV").text("${targetProductName}")`
-    );
-
-    let previousSource = null;
-    let found = false;
-    let attempts = 0;
-
-    while (!found && attempts < maxAttempts) {
-      found = await targetElement.isDisplayed().catch(() => false);
-      if (found) break;
-
-      const currentSource = await client.getPageSource();
-
-      if (currentSource === previousSource) {
-        throw new Error(
-          `"${targetProductName}" elementi bulunamadı ve liste sonuna ulaşıldı (${attempts} scroll denemesi sonrası, ekran artık değişmiyor).`
-        );
-      }
-
-      previousSource = currentSource;
-
-      await client.execute('mobile: scrollGesture', {
-        elementId: await listContainer.elementId,
-        direction: 'down',
-        percent: 0.75,
-      });
-      attempts++;
-    }
-
-    if (!found) {
-      found = await targetElement.isDisplayed().catch(() => false);
-    }
+    const found = await catalogScreen.scrollToProduct(targetProductName, maxAttempts);
 
     assert.strictEqual(
       found,
